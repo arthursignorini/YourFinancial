@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CALENDAR</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/calendario.css">
+    <style>
+        /* Adicione o CSS diretamente no HTML para facilitar */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+            padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+        }
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .has-note {
+            color: red;
+        }
+        .calendar-body {
+            margin-top: 20px;
+        }
+        .calendar-week-days,
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        .calendar-week-days div,
+        .calendar-days div {
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .calendar-week-days div {
+            font-weight: bold;
+        }
+        .calendar-days div {
+            cursor: pointer;
+        }
+        .current-date {
+            background-color: #87ceeb;
+            color: white;
+        }
+        .note-display {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .note-display h3 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="interface">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="../assets/images/logo.png" alt="logoYF">
+                </a>
+            </div>
+            <nav class="menu-desktop">
+                <div class="txt-topo-site">
+                    <i class="bi bi-bell corner-icon"></i>
+                    <i class="bi bi-cash corner-icon"></i>
+                    <h2 class="titulo">CALENDÁRIO</h2>
+                    <ul>
+                        <li><a href="despesas.html">Receitas e Despesas</a></li>
+                        <li><a href="not.html">Notificações</a></li>
+                        <li><a href="suporte.html">Suporte</a></li>
+    
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+    
+<div id="note-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2 style="color: #333; text-align: center; margin-bottom: 20px;">Adicionar Lembrete</h2>
+        <textarea id="note-input" rows="4" cols="50" style="width: 100%; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; padding: 10px; resize: none;"></textarea>
+        <button id="save-note" style="background-color: #4caf50; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 5px; transition: background-color 0.3s; width: 100%;">Salvar</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="calendar">
+        <div class="calendar-header">
+            <span class="month-picker" id="month-picker"> Maio </span>
+            <div class="year-picker" id="year-picker">
+                <span class="year-change" id="pre-year">&lt;</span>
+                <span id="year">2020</span>
+                <span class="year-change" id="next-year">&gt;</span>
+            </div>
+        </div>
+        <div class="calendar-body">
+            <div class="calendar-week-days">
+                <div>Dom</div>
+                <div>Seg</div>
+                <div>Ter</div>
+                <div>Qua</div>
+                <div>Qui</div>
+                <div>Sex</div>
+                <div>Sab</div>
+            </div>
+            <div class="calendar-days"></div>
+        </div>
+        <div class="calendar-footer"></div>
+        <div class="date-time-formate">
+            <div class="day-text-formate">HOJE</div>
+            <div class="date-time-value">
+                <div class="date-formate">23 - Julho - 2022</div>
+            </div>
+        </div>
+        <div class="month-list hide"></div>
+    </div>
+</div>
+
+<script>
+    const isLeapYear = (year) => {
+        return (
+            (year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) ||
+            (year % 100 === 0 && year % 400 === 0)
+        );
+    };
+    const getFebDays = (year) => {
+        return isLeapYear(year) ? 29 : 28;
+    };
+    let calendar = document.querySelector('.calendar');
+    const month_names = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+    let month_picker = document.querySelector('#month-picker');
+    const dayTextFormate = document.querySelector('.day-text-formate');
+    const timeFormate = document.querySelector('.time-formate');
+    const dateFormate = document.querySelector('.date-formate');
+    const noteDisplayText = document.getElementById('note-display-text');
+
+    month_picker.onclick = () => {
+        month_list.classList.remove('hideonce');
+        month_list.classList.remove('hide');
+        month_list.classList.add('show');
+        dayTextFormate.classList.remove('showtime');
+        dayTextFormate.classList.add('hidetime');
+        timeFormate.classList.remove('showtime');
+        timeFormate.classList.add('hideTime');
+        dateFormate.classList.remove('showtime');
+        dateFormate.classList.add('hideTime');
+    };
+
+    let notes = {}; // { '2020-05-23': 'Note text here' }
+
+    const noteModal = document.getElementById('note-modal');
+    const noteInput = document.getElementById('note-input');
+    const saveNoteButton = document.getElementById('save-note');
+    const closeButton = document.querySelector('.close-button');
+    let selectedDate = null;
+
+    closeButton.onclick = () => {
+        noteModal.style.display = 'none';
+    };
+
+    saveNoteButton.onclick = () => {
+        if (selectedDate) {
+            notes[selectedDate] = noteInput.value;
+            noteModal.style.display = 'none';
+            generateCalendar(currentMonth.value, currentYear.value); // Refresh the calendar to show the note indicator
+            displayNoteForSelectedDate(selectedDate);
+        }
+    };
+
+    window.onclick = (event) => {
+        if (event.target == noteModal) {
+            noteModal.style.display = 'none';
+        }
+    };
+
+    const openNoteModal = (dateString) => {
+        selectedDate = dateString;
+        noteInput.value = notes[selectedDate] || '';
+        noteModal.style.display = 'block';
+    };
+
+    const displayNoteForSelectedDate = (dateString) => {
+        noteDisplayText.textContent = notes[dateString] || 'No note for this day.';
+    };
+
+    const generateCalendar = (month, year) => {
+        let calendar_days = document.querySelector('.calendar-days');
+        calendar_days.innerHTML = '';
+        let calendar_header_year = document.querySelector('#year');
+        let days_of_month = [
+            31, getFebDays(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+        ];
+
+        let currentDate = new Date();
+
+        month_picker.innerHTML = month_names[month];
+
+        calendar_header_year.innerHTML = year;
+
+        let first_day = new Date(year, month, 1);
+
+        for (let i = 0; i <= days_of_month[month] + first_day.getDay() - 1; i++) {
+            let day = document.createElement('div');
+            if (i >= first_day.getDay()) {
+                let dayNumber = i - first_day.getDay() + 1;
+                day.innerHTML = dayNumber;
+                let dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNumber).padStart(2, '0')}`;
+                day.onclick = () => {
+                    openNoteModal(dateString);
+                    displayNoteForSelectedDate(dateString);
+                };
+
+                if (notes[dateString]) {
+                    day.classList.add('has-note');
+                }
+
+                if (dayNumber === currentDate.getDate() &&
+                    year === currentDate.getFullYear() &&
+                    month === currentDate.getMonth()) {
+                    day.classList.add('current-date');
+                }
+            }
+            calendar_days.appendChild(day);
+        }
+    };
+
+    let month_list = calendar.querySelector('.month-list');
+    month_names.forEach((e, index) => {
+        let month = document.createElement('div');
+        month.innerHTML = `<div>${e}</div>`;
+        month_list.append(month);
+        month.onclick = () => {
+            currentMonth.value = index;
+            generateCalendar(currentMonth.value, currentYear.value);
+            month_list.classList.replace('show', 'hide');
+            dayTextFormate.classList.remove('hideTime');
+            dayTextFormate.classList.add('showtime');
+            timeFormate.classList.remove('hideTime');
+            timeFormate.classList.add('showtime');
+            dateFormate.classList.remove('hideTime');
+            dateFormate.classList.add('showtime');
+        };
+    });
+
+    (function () {
+        month_list.classList.add('hideonce');
+    })();
+
+    document.querySelector('#pre-year').onclick = () => {
+        --currentYear.value;
+        generateCalendar(currentMonth.value, currentYear.value);
+    };
+
+    document.querySelector('#next-year').onclick = () => {
+        ++currentYear.value;
+        generateCalendar(currentMonth.value, currentYear.value);
+    };
+
+    let currentDate = new Date();
+    let currentMonth = { value: currentDate.getMonth() };
+    let currentYear = { value: currentDate.getFullYear() };
+    generateCalendar(currentMonth.value, currentYear.value);
+
+    const todayShowTime = document.querySelector('.time-formate');
+    const todayShowDate = document.querySelector('.date-formate');
+
+    const currshowDate = new Date();
+    const showCurrentDateOption = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+    };
+    const currentDateFormate = new Intl.DateTimeFormat('pt-BR', showCurrentDateOption).format(currshowDate);
+    todayShowDate.textContent = currentDateFormate;
+
+    setInterval(() => {
+        const timer = new Date();
+        const option = {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric'
+        };
+        const formateTimer = new Intl.DateTimeFormat('pt-BR', option).format(timer);
+        todayShowTime.textContent = formateTimer;
+    }, 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CALCULADORA DE INVESTIMENTOS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <link rel="stylesheet" href="../assets/css/calculadora-investimento.css">
+    <script src="../assets/js/calculadora-investimento.js"></script>
+
+</head>
+
+<body>
+    <header class="header">
+        <div class="interface">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="../assets/images/logo.png" alt="logoYF">
+                </a>
+            </div>
+            <nav class="menu-desktop">
+                <div class="txt-topo-site">
+                    <i class="bi bi-bell corner-icon"></i>
+                    <i class="bi bi-cash corner-icon"></i>
+                    <h2 class="titulo" style="font-family: 'Poppins', sans-serif;"><strong>SIMULAR INVESTIMENTO</strong></h2>
+
+                    <ul>
+                        <li><a href="investimentos.html">Investimento</a></li>
+                        <li><a href="painelControleMetas.html">Painel de Controle</a></li>
+                        <li><a href="despesas.html">Despesas e Receitas</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div id="screen1" class="container">
+        <form id="inputForm" action="javascript:void(0);" method="POST">
+            <div id="formCard" class="card">
+                <div class="card-header text-center">
+                    <h5 id="simulatorTitle" style="color: #817f7f;">Simulador de Investimentos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label for="name" class="col-sm-5 col-form-label text-center">Seu nome</label>
+                        <div class="col-sm-7">
+                            <input id="name" class="form-control" type="text" required>
+                        </div>    
+                    </div>
+                    <hr />
+                    <div class="form-group row">  
+                        <label for="initialInvestment" class="col-sm-5 col-form-label text-center">Aporte inicial</label>
+                        <div class="col-sm-7">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">R$</div>
+                                </div>
+                                <input id="initialInvestment" class="form-control" type="number" placeholder="Ex.: 1000,00" min="1" step="0.50" required>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-group row">  
+                        <label for="monthlyInvestment" class="col-sm-5 col-form-label text-center">Investimento mensal</label>
+                        <div class="col-sm-7">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">R$</div>
+                                </div>
+                                <input id="monthlyInvestment" class="form-control" type="number" placeholder="Ex.: 200,00" min="1" step="0.50" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">  
+                        <label for="annualInterestRate" class="col-sm-5 col-form-label text-center">Rendimento anual</label>
+                        <div class="col-sm-7">
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">%</div>
+                                </div>
+                                <input id="annualInterestRate" class="form-control" type="number" placeholder="Ex.: 12%" min="1" step="0.50" required>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group row">
+                        <label for="contributionTime" class="col-sm-5 text-center">Tempo de contribuição</label>
+                        <div class="col-sm-7">
+                            <input type="number" id="contributionTime" class="form-control form-control-sm" min="1" max="600" step="1" placeholder="Ex.: 120 (meses)">
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <input id="simulate" class="btn btn-primary btn-lg text-center" type="submit" value="Simular">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div id="screen2" class="container">
+        <div id="alert-outputText" class="alert alert-success">
+            <span id="outputText"></span>
+        </div>
+        <div class="text-center">
+            <input id="simulateAgain" class="btn btn-primary btn-lg" type="button" value="Nova Simulação">
+        </div>
+    </div>
+    
+
+</body>
+
+
+</html>

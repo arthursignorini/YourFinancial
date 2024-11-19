@@ -1,0 +1,267 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+
+/* GERAL */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+section {
+    padding: 40px 4%;
+}
+
+.painel .topo_painel .painelMetas .metaInfo {
+    padding: 10px 4%;
+}
+
+body {
+    background-color: #BDB4B5;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; 
+    height: 200vh;
+    
+}
+
+.interface {
+    max-width: 1280px;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: #F3E7E7;
+    z-index: 1000; /* Garante que o header fique acima de outros elementos */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Mantendo a imagem da mesma forma */
+.header .logo {
+    float: left;
+}
+
+.header .logo img {
+    width: 100px; 
+}
+
+.header img {
+    max-width: 100px; 
+}
+
+.logo {
+    float: left;
+}
+
+.menu-desktop {
+    text-align: center;
+    padding-left: 310px;
+}
+
+.menu-desktop ul {
+    list-style-type: none;
+    display: inline-block;
+}
+
+.txt-topo-site {
+    text-align: center;
+}
+
+.menu-desktop ul li {
+    display: inline-block;
+    padding: 0 20px;
+}
+
+.menu-desktop ul li a {
+    color: #817f7f;
+    font-size: 24px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.menu-desktop ul li a:hover {
+    color: #656464;
+    transform: scale(1.2);
+    transition: .2s;
+}
+
+.txt-topo-site .titulo {
+    color: #000000;
+    font-size: 30px;
+    margin: 15px 0;
+    padding-right: 30px;
+}
+
+.corner-icon {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #848688;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.corner-icon:hover {
+    background-color: #848688;
+    box-shadow: 0px 0px 8px;
+    transform: scale(1.1);
+    transition: .2s;
+    cursor: pointer;
+}
+
+.corner-icon + .corner-icon {
+    margin-top: 70px;
+}
+
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    background-color: #F3E7E7;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    margin-top: 250px; 
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.flex-box {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+h2{
+    text-align: center;
+}
+
+.flex-box h2 {
+    margin-top: 0;
+}
+
+.flex-box label,
+.flex-box input,
+.flex-box select,
+.flex-box textarea,
+.flex-box button {
+    margin: 5px 0;
+    padding: 10px;
+}
+
+textarea {
+    resize: none;
+}
+
+button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .menu-desktop ul {
+        display: in;
+        text-align: center;
+    }
+
+    .menu-desktop ul li {
+        display: block;
+        padding: 10px 0;
+    }
+
+    .menu-desktop ul li a {
+        font-size: 20px;
+    }
+
+    .txt-topo-site .titulo {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .flex-box {
+        padding: 10px;
+    }
+
+    .flex-box label,
+    .flex-box input,
+    .flex-box select,
+    .flex-box textarea,
+    .flex-box button {
+        margin: 8px 0;
+        padding: 8px;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .corner-icon {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+    .menu-desktop ul li a {
+        font-size: 18px;
+    }
+
+    .txt-topo-site .titulo {
+        font-size: 20px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .flex-box {
+        padding: 8px;
+    }
+
+    .flex-box label,
+    .flex-box input,
+    .flex-box select,
+    .flex-box textarea,
+    .flex-box button {
+        margin: 6px 0;
+        padding: 6px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+

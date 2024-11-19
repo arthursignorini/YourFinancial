@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Poupança</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #BDB4B5;
+            height: 100vh;
+        }
+
+        .interface {
+            max-width: 1280px;
+            
+        }
+
+        .header {
+            padding: 20px;
+            background-color: #F3E7E7;
+        }
+
+        .logo {
+            float: left;
+        }
+
+        .logo img {
+            max-width: 100px; /* Ajuste o tamanho conforme necessário */
+            height: auto;
+        }
+
+        .menu-desktop {
+            text-align: center;
+            padding-left: 285px;
+        }
+
+        .menu-desktop ul {
+            list-style-type: none;
+            display: inline-block;
+        }
+
+        .txt-topo-site {
+            text-align: center;
+        }
+
+        .menu-desktop ul li {
+            display: inline-block;
+            padding: 0 20px;
+        }
+
+        .menu-desktop ul li a {
+            color: #817f7f;
+            font-size: 24px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .menu-desktop ul li a:hover {
+            color: #656464;
+            transform: scale(1.2);
+            transition: .2s;
+        }
+
+        .txt-topo-site .titulo {
+            color: #000000;
+            font-size: 30px;
+            margin: 15px 0;
+        }
+
+        .corner-icon {
+            position: absolute;
+            top:10px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #848688;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .corner-icon:hover {
+            background-color: #848688;
+            box-shadow: 0px 0px 8px;
+            transform: scale(1.1);
+            transition: .2s;
+            cursor: pointer;
+        }
+
+        .corner-icon + .corner-icon {
+            margin-top: 70px;
+        }
+
+
+        /* CALCULADORA */
+        .calculator-section {
+            padding: 50px 30px;
+            background-color: #BDB4B5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calculator-section h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: calc(100% - 20px);
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-group button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #EDEDED;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="interface">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="../assets/images/logo.png" alt="logoYF">
+                </a>
+            </div>
+            <nav class="menu-desktop">
+                <div class="txt-topo-site">
+                    <i class="bi bi-bell corner-icon"></i>
+                    <i class="bi bi-cash corner-icon"></i>
+                    <h2 class="titulo">POUPAR</h2>
+                    <ul>
+                        <li><a href="painelControleMetas.html">Painel de Controle</a></li>
+                        <li><a href="investimentos.html">Investimento</a></li>
+                        <li><a href="despesas.html">Despesas e Receitas</a></li> 
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="calculator-section">
+        <div class="interface">
+            <h1>Calculadora de Poupança</h1>
+            <div class="form-group">
+                <label for="goal">Objetivo (em reais):</label>
+                <input type="number" id="goal" placeholder="Digite o valor do seu objetivo">
+            </div>
+            <div class="form-group">
+                <label for="months">Número de meses:</label>
+                <input type="number" id="months" placeholder="Digite o número de meses">
+            </div>
+            <div class="form-group">
+                <button onclick="calculateSavings()">Calcular</button>
+            </div>
+            <div id="result" class="result"></div>
+        </div>
+    </main>
+
+    <script>
+        function calculateSavings() {
+            var goal = document.getElementById('goal').value;
+            var months = document.getElementById('months').value;
+
+            if (goal && months) {
+                var savingsPerMonth = goal / months;
+                document.getElementById('result').innerText = `Você precisa poupar R$ ${savingsPerMonth.toFixed(2)} por mês para atingir seu objetivo.`;
+            } else {
+                document.getElementById('result').innerText = 'Por favor, preencha todos os campos.';
+            }
+        }
+    </script>
+</body>
+</html>

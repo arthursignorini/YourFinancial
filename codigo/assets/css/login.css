@@ -1,0 +1,18 @@
+body {
+    background-color: #BDB4B5;
+  }
+  .text-info {
+    color: #817f7f !important; /* Cor do texto */
+  }
+  .btn-info {
+    background-color: #F3E7E7;
+    border-color: #000000;
+    margin-top: 10px;
+  }
+  .btn-info:hover {
+    color: #656464;
+  }
+  .modal-header, .modal-footer {
+    background-color: #817f7f /* Fundo do cabeçalho e rodapé do modal */
+  }
+  

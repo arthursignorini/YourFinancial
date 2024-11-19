@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> YF-YourFinanace</title>
+    <link rel="icon" href="assets/img/logoOFC.png">
+    <link rel="stylesheet" href="../assets/css/painelControleMetas.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="../assets/js/painelControleMetas.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header class="header">
+        <div class="interface">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="../assets/images/logo.png" alt="logoYF" width="110px">
+                </a>
+            </div>
+            <nav class="menu-desktop">
+                <div class="txt-topo-site">
+                    <i class="bi bi-bell corner-icon"></i>
+                    <i class="bi bi-cash corner-icon"></i>
+                    <h2 class="titulo">Painel de Controle</h2>
+                    <ul>
+                        <li><a href="despesas.html">Despesas e Receitas</a></li>
+                        <li><a href="investimentos.html">Investimentos</a></li>
+                        <li><a href="calculadora-poupança.html">Poupar</a></li>
+                        <li><a href="suporte.html">Suporte</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="painel">
+            <div class="interface">
+                <div class="topo_painel">
+                    <h1>Relatório</h1>
+                </div>
+        </section>
+        <section>
+            <div class="interface">
+                <div class="quadroGraph">
+                    <div class="grafico" id="grafico">
+                        <!DOCTYPE html>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', (event) => {
+                                atualizarGrafico();
+                            });
+                    
+                            function atualizarGrafico() {
+                                const mesSelecionado = document.getElementById("intervaloMes") ? document.getElementById("intervaloMes").value : "Mensal";
+                                const semanaSelecionada = document.getElementById("intervaloSemanal") ? document.getElementById("intervaloSemanal").value : "Semana";
+                    
+                                // Recuperar dados de ganhos e despesas do localStorage
+                                const totalGanhos = parseFloat(localStorage.getItem('totalGanhos')) || 0;
+                                const totalDespesas = parseFloat(localStorage.getItem('totalDespesas')) || 0;
+                    
+                                // Gerar dados para o gráfico
+                                const dadosGanhos = Array(7).fill(0);
+                                const dadosDespesas = Array(7).fill(0);
+                    
+                                if (totalGanhos > 0 || totalDespesas > 0) {
+                                    for (let i = 0; i < 7; i++) {
+                                        dadosGanhos[i] = totalGanhos / 7; // Dividir total de ganhos igualmente entre 7 dias
+                                        dadosDespesas[i] = totalDespesas / 7; // Dividir total de despesas igualmente entre 7 dias
+                                    }
+                                }
+                    
+                                // Atualizar o gráfico com os novos dados
+                                atualizarGraficoComDados(dadosGanhos, dadosDespesas, mesSelecionado, semanaSelecionada);
+                            }
+                    
+                            function atualizarGraficoComDados(dadosGanhos, dadosDespesas, mesSelecionado, semanaSelecionada) {
+                                // Limpar o gráfico existente, se houver
+                                d3.select("#grafico").select("svg").remove();
+                    
+                                // Configurações do gráfico
+                                const width = 400;
+                                const height = 200;
+                                const barWidth = width / 7; // Assumindo que há 7 dias em uma semana
+                    
+                                // Seleciona o elemento SVG onde o gráfico será desenhado
+                                const svg = d3.select("#grafico")
+                                    .append("svg")
+                                    .attr("width", width)
+                                    .attr("height", height);
+                    
+                                // Escalas para eixo x e y
+                                const xScale = d3.scaleBand()
+                                    .domain(['S', 'T', 'Q', 'Q', 'S', 'S', 'D']) // Iniciais dos dias da semana
+                                    .range([0, width])
+                                    .padding(0.1);
+                    
+                                const yScale = d3.scaleLinear()
+                                    .domain([0, 20000]) // Máximo do eixo y definido como 20000
+                                    .range([height, 0]);
+                    
+                                // Desenha as barras de ganhos
+                                svg.selectAll(".bar-ganhos")
+                                    .data(dadosGanhos)
+                                    .enter().append("rect")
+                                    .attr("class", "bar-ganhos")
+                                    .attr("x", (d, i) => xScale(xScale.domain()[i]))
+                                    .attr("y", d => yScale(d))
+                                    .attr("width", xScale.bandwidth() / 2)
+                                    .attr("height", d => height - yScale(d))
+                                    .attr("fill", "green");
+                    
+                                // Desenha as barras de despesas
+                                svg.selectAll(".bar-despesas")
+                                    .data(dadosDespesas)
+                                    .enter().append("rect")
+                                    .attr("class", "bar-despesas")
+                                    .attr("x", (d, i) => xScale(xScale.domain()[i]) + xScale.bandwidth() / 2)
+                                    .attr("y", d => yScale(d))
+                                    .attr("width", xScale.bandwidth() / 2)
+                                    .attr("height", d => height - yScale(d))
+                                    .attr("fill", "red");
+                    
+                                // Adiciona eixos
+                                svg.append("g")
+                                    .attr("transform", `translate(0,${height})`)
+                                    .call(d3.axisBottom(xScale));
+                    
+                                svg.append("g")
+                                    .call(d3.axisLeft(yScale));
+                    
+                                // Adiciona título ao gráfico
+                                svg.append("text")
+                                    .attr("x", width / 2)
+                                    .attr("y", 20)
+                                    .attr("text-anchor", "middle")
+                                    .text(`Ganhos e Despesas - ${mesSelecionado} - Semana ${semanaSelecionada}`);
+                            }
+                        </script>
+                    </div>
+                    <div class="grapOps">
+                        <div class="btnMes">
+                            <select name="intervalo" id="intervaloMes" onchange="atualizarGrafico()">
+                                <option value="mes" selected>Mensal</option>
+                                <option value="Jan">Janeiro</option>
+                                <option value="Fev">Fevereiro</option>
+                                <option value="Mar">Março</option>
+                                <option value="Abr">Abril</option>
+                                <option value="Mai">Maio</option>
+                                <option value="Jun">Junho</option>
+                                <option value="Jul">Julho</option>
+                                <option value="Ago">Agosto</option>
+                                <option value="Set">Setembro</option>
+                                <option value="Out">Outubro</option>
+                                <option value="Nov">Novembro</option>
+                                <option value="Dez">Dezembro</option>
+                            </select>
+                            <div class="btnSemana">
+                                <select name="intervalo" id="intervaloSemanal" onchange="atualizarGrafico()">
+                                    <option value="semana">Semanal</option>
+                                    <option value="1">Semana 1</option>
+                                    <option value="2">Semana 2</option>
+                                    <option value="3">Semana 3</option>
+                                    <option value="4">Semana 4</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="painel">
+            <div class="topo_painel">
+                <h1>METAS</h1>
+            </div>
+        </section>
+        <section>
+            <div class="interface">
+                <div class="painelMetas">
+                    <div class="metaInfo">
+                        <div class="relatorioMetas">
+                            <h2>Relatório de Metas</h2>
+                            <p>Descrição das metas e progresso.</p>
+                            <div class="center">
+                                <button id="show-meta">Adicionar Meta</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="barrasProgresso">
+                        <!-- Metas serão adicionadas aqui dinamicamente -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <div class="btn-fechar">&times;</div>
+                <div class="inputMeta">
+                    <h2 id="popup-title">Adicionar Meta</h2>
+                    <form id="formMeta">
+                        <label for="metaNome">Nome da Meta:</label>
+                        <input type="text" id="metaNome" name="metaNome" required>
+                        <label for="metaValorMax">Valor Máximo Desejado:</label>
+                        <input type="number" id="metaValorMax" name="metaValorMax" min="0" required>
+                        <button type="submit">Salvar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="script.js"></script>
+        <script src="script.js"></script>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/painelControleMetas.js"></script>
+</body>
+</html>
